@@ -45,7 +45,21 @@ data={
     'time':'',
     'admin':''
 }
-
+now = datetime.now()
+dtString = now.strftime('%H:%M:%S')
+dtlimit = int(dtString[0:2])
+if (dtlimit<=20) and (dtlimit>=14):
+	result=firebase.delete('DCS',None)
+	data['Name']="dummy"
+	data['time']="0000"
+	data['admin']="0000"
+	result=firebase.patch('/DCS', data)
+if (dtlimit<14) and (dtlimit>=8):
+	result=firebase.delete('ACS',None)
+	data['Name']="dummy"
+	data['time']="0000"
+	data['admin']="0000"
+	result=firebase.patch('/ACS', data)  
 for cl in myList:
 	curImg = cv2.imread(f'{path}/{cl}') 
 	if not os.path.splitext(cl)[0].startswith("."):     
