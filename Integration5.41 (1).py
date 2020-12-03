@@ -45,31 +45,36 @@ data={
     'time':'',
     'admin':''
 }
-now = datetime.now()
-dtString = now.strftime('%H:%M:%S')
-dtlimit = int(dtString[0:2])
-if (dtlimit<=20) and (dtlimit>=14):
-	result=firebase.delete('DCS',None)
-	data['Name']="dummy"
-	data['time']="0000"
-	data['admin']="0000"
-	result=firebase.patch('/DCS', data)
-if (dtlimit<14) and (dtlimit>=8):
-	result=firebase.delete('ACS',None)
-	data['Name']="dummy"
-	data['time']="0000"
-	data['admin']="0000"
-	result=firebase.patch('/ACS', data)  
-for cl in myList:
-	curImg = cv2.imread(f'{path}/{cl}') 
-	if not os.path.splitext(cl)[0].startswith("."):     
-		images.append (curImg) 
-		#classNames.append(os.path.splitext(cl)[0]) 
-		cls=os.path.splitext(cl)[0]
-		cls1=cls[0:4]
-		cls2=cls[4:]
-		admin.append(cls1)
-		classNames.append(cls2) 
+def DeleteData():
+	now = datetime.now()
+	dtString = now.strftime('%H:%M:%S')
+	dtlimit = int(dtString[0:2])
+	if (dtlimit<=20) and (dtlimit>=14):
+		result=firebase.delete('DCS',None)
+		data['Name']="dummy"
+		data['time']="0000"
+		data['admin']="0000"
+		result=firebase.patch('/DCS', data)
+	if (dtlimit<14) and (dtlimit>=8):
+		result=firebase.delete('ACS',None)
+		data['Name']="dummy"
+		data['time']="0000"
+		data['admin']="0000"
+		result=firebase.patch('/ACS', data)  
+	for cl in myList:
+		curImg = cv2.imread(f'{path}/{cl}') 
+		if not os.path.splitext(cl)[0].startswith("."):     
+			images.append (curImg) 
+			#classNames.append(os.path.splitext(cl)[0]) 
+			cls=os.path.splitext(cl)[0]
+			cls1=cls[0:4]
+			cls2=cls[4:]
+			admin.append(cls1)
+			classNames.append(cls2) 
+	scheduler = BlockingScheduler()
+	scheduler.add_job(some_job, 'interval', hours=10)
+	scheduler.start()
+
 
 def taskCapture(inputId,queueIn):
 	global bQuit
